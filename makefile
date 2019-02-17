@@ -1,34 +1,43 @@
 
-#******************************
-# Make file for EasyTrace
-# Made by Robert Goes (2018)
-#******************************
 
-CC = g++
-CFLAGS = -ggdb -Wall
-MAIN_INCLUDES = util.h
-MAIN_NAME = test.cpp
-FILENAME = NN2
+
+# Example makefile for using the mat libraries
+BIN=test
+
+# what you want to name your tar/zip file:
 TARNAME=goes1944
+CXX=g++
 
-.PHONY: all clean debug
-#*****************************
+##CXXFLAGS=-O3 -Wall   # optimize
+CXXFLAGS= -std=c++11 -ggdb -Wall # debug
+##LIBS = -lm
 
-all: clean $(FILENAME)
+EXAMPLES=
 
-debug: CFLAGS += -g
-debug: $(FILENAME)
+EXTRAS=\
+
+
+SRCS=\
+$(BIN).cpp\
+util.cpp
+
+HDRS=\
+util.h
+
+OBJS=\
+$(BIN).o\
+util.o\
+
+$(BIN): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) $(LIBS) -o $(BIN)
 
 clean:
-	-rm -f *.o $(FILENAME) $(TARNAME).tar
-#******************************
-$(FILENAME): main.o $(MAIN_INCLUDES)
-	$(CC) $(CFLAGS) -o $(FILENAME) main.o $(MAIN_INCLUDES)
-
-main.o: $(MAIN_NAME)
-	$(CC) $(CFLAGS) -c -o main.o $(MAIN_NAME)
+	/bin/rm -f *.o $(BIN)*.tar *~ core gmon.out a.out
 
 tar:
-	tar -cvzf $(TARNAME).tar makefile *.cpp *.h Eigen
+	tar -cvzf $(TARNAME).tar makefile $(EXAMPLES) $(SRCS) $(HDRS) $(EXTRAS) Eigen
 	ls -l $(TARNAME).tar
 
+zip:
+	zip $(TARNAME).zip makefile $(EXAMPLES) $(SRCS) $(HDRS) $(EXTRAS)
+	ls -l $(TARNAME).zip
