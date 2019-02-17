@@ -19,14 +19,14 @@ EXTRAS=\
 
 SRCS=\
 $(BIN).cpp\
-util.cpp
+dataset.cpp
 
 HDRS=\
-util.h
+dataset.h
 
 OBJS=\
 $(BIN).o\
-util.o\
+dataset.o\
 
 $(BIN): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(LIBS) -o $(BIN)
