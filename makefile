@@ -2,7 +2,7 @@
 
 
 # Example makefile for using the mat libraries
-BIN=test
+BIN=nn
 
 # what you want to name your tar/zip file:
 TARNAME=goes1944
@@ -19,23 +19,26 @@ EXTRAS=\
 
 SRCS=\
 $(BIN).cpp\
-dataset.cpp
+dataset.cpp\
+utility.cpp
 
 HDRS=\
-dataset.h
+dataset.h\
+utility.h
 
 OBJS=\
 $(BIN).o\
 dataset.o\
+utility.o
 
 $(BIN): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(LIBS) -o $(BIN)
 
 clean:
-	/bin/rm -f *.o $(BIN)*.tar *~ core gmon.out a.out
+	/bin/rm -f *.o $(TARNAME).tar *~ core gmon.out a.out
 
 tar:
-	tar -cvzf $(TARNAME).tar makefile $(EXAMPLES) $(SRCS) $(HDRS) $(EXTRAS) Eigen
+	tar -cvf $(TARNAME).tar makefile $(EXAMPLES) $(SRCS) $(HDRS) $(EXTRAS) Eigen
 	ls -l $(TARNAME).tar
 
 zip:
