@@ -32,20 +32,25 @@ int main()
  IF_DEBUG printf("d:%d\tn:%d\th:%d\tm:%d\n",d,n,h,m);
 
  //initialize X as (dxn+1) the +1 is for the bias, which will be on the left
- MatrixXd X(d,n+1);
- X<<MatrixXd::Constant(d,1,-1.0),data.TrainingData.leftCols(data.inputs);
+ MatrixXd X(d,n);
+ X<<data.TrainingData.leftCols(data.inputs);
  IF_DEBUG debugPrint(X,"X-inputs");
 
 //normalize inputs
- MatrixXd X_n = normMinMax(X);
- IF_DEBUG debugPrint(X_n,"X_n-inputs normalized");
+ MatrixXd Xn = normMinMax(X);
+ IF_DEBUG debugPrint(Xn,"Xn-inputs normalized");
+
+//add bias to x
+MatrixXd Xb(d,n+1);
+Xb<<MatrixXd::Constant(d,1,-1.0),Xn.leftCols(n);
+IF_DEBUG debugPrint(Xb, "Xb-input with bias");
 
 //first row of weights for connects to hidden layer
  MatrixXd V = randUnif(n+1,h,0.0,1.0);
  IF_DEBUG debugPrint(V, "V-weights");
 
 //First hidden layer
- MatrixXd H = (X_n*V).unaryExpr(std::ptr_fun(transfer));
+ MatrixXd H = (Xb*V).unaryExpr(std::ptr_fun(transfer));
  IF_DEBUG debugPrint(H, "H-hidden nodes");
  
  //add bias nodes to H
