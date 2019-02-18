@@ -68,7 +68,7 @@ Eigen::MatrixXd normMinMax(const Eigen::MatrixXd& input)
     VectorXd maxVal = input.colwise().maxCoeff();
 
     int r = int(input.rows());
-    int c = (input.cols());
+    int c = int(input.cols());
 
     //create a new matrix that will be rescaled
     MatrixXd output(r,c);
