@@ -39,4 +39,5 @@ Eigen::MatrixXd read_std();
  * Outputs: struct containings the params
  */
 struct dataParam read_data_param();
+
 #endif

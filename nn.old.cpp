@@ -18,19 +18,12 @@ double transfer(double x)
   return 1.0/(1.0 + std::exp(-4.0 * x));
 }
 
-MatrixXd train(DataSet& data);
-
 
 int main()
 {
  DataSet data;
- MatrixXd results = train(data);
- return 0;
-}
+ data.print();
 
-
-MatrixXd train(DataSet& data)
-{
  int d = data.TrainingData.rows();
  int n = data.inputs;
  int h = data.hiddenNodes;
@@ -77,6 +70,12 @@ IF_DEBUG debugPrint(Xb, "Xb-input with bias");
  MatrixXd T(d,m);
  T<<data.TrainingData.rightCols(m);
  IF_DEBUG debugPrint(T, "T-targets");
-
- return Y;
+/*
+ debugPrint(In,"test data");
+ MatrixXd In2 = normMinMax(In);
+ debugPrint(In2,"test data normalized");
+ MatrixXd W = randUnif(2,5,0.0,1.0);
+ debugPrint(W,"Weights");
+ return 0;
+ */
 }
