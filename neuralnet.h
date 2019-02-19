@@ -8,6 +8,7 @@
 #include "Eigen/Dense"
 #include "dataset.h"
 
+
 /**
  * This class represents a feed forward neural network with backpropergation.
  * It only has one hidden layer. 
@@ -26,7 +27,7 @@ public:
      * of iterations
      * inputs: eta (learning rate) num_iter (num of training runs)
      */
-    void train(double eta = 0.1, double num_iter = 10000);
+    void train(double eta, double num_iter);
 
     /**
      * predict
@@ -37,7 +38,7 @@ public:
      * Output: Vector of outputs
      * 
      */
-    Eigen::VectorXd output predict(const Eigen::VectorXd &input);
+    Eigen::VectorXd predict(const Eigen::VectorXd &input);
 
 //public variables   
 public:
