@@ -4,6 +4,7 @@
 #include "Eigen/Dense"
 #include "dataset.h"
 #include "utility.h"
+#include "neuralnet.h"
 
 #define DEBUG 1
 #define IF_DEBUG if(DEBUG)
@@ -24,7 +25,7 @@ MatrixXd train(DataSet& data);
 int main()
 {
  DataSet data;
- MatrixXd results = train(data);
+ NeuralNet a(data);
  return 0;
 }
 

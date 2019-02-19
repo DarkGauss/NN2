@@ -20,16 +20,19 @@ EXTRAS=\
 SRCS=\
 $(BIN).cpp\
 dataset.cpp\
-utility.cpp
+utility.cpp\
+neuralnet.cpp
 
 HDRS=\
 dataset.h\
-utility.h
+utility.h\
+neuralnet.h
 
 OBJS=\
 $(BIN).o\
 dataset.o\
-utility.o
+utility.o\
+neuralnet.o
 
 $(BIN): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(LIBS) -o $(BIN)
