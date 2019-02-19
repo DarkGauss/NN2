@@ -1,4 +1,4 @@
-#define EIGEN_USE_MKL_AL
+
 #include <iostream>
 #include <cmath>
 #include "Eigen/Dense"

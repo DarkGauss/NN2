@@ -47,7 +47,7 @@ public:
 private:
     double transfer(double x);
     void feedForward(const Eigen::MatrixXd &input);
-    void backProp();
+    void backProp(double eta);
 
 //private variables
 private:

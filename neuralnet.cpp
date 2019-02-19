@@ -66,8 +66,9 @@ NeuralNet::~NeuralNet()
 //public functions
 void NeuralNet::train(double eta, double num_iter)
 {
+    for(int i = 0; i < num_iter; i++)
     feedForward(X);
-    backProp();
+    backProp(eta);
 }
 
 Eigen::VectorXd NeuralNet::predict(const Eigen::VectorXd &input)
@@ -94,19 +95,43 @@ void NeuralNet::feedForward(const Eigen::MatrixXd &input)
     IF_DEBUG debugPrint(W, "W - Weights");
     IF_DEBUG debugPrint(Hb*W, "Hb*W - Weights");
     //calculuate t he outputs
-    MatrixXd Y = (Hb*W).unaryExpr([this](double x){ return NeuralNet::transfer(x);});
+    Y = (Hb*W).unaryExpr([this](double x){ return NeuralNet::transfer(x);});
     IF_DEBUG debugPrint(Y, "Y-outputs");   
 }
 
-void NeuralNet::backProp()
+void NeuralNet::backProp(double eta)
 {
-    MatrixXd t_1 = Y-T;
-    debugPrint(t_1, "Y-T");
 
-    MatrixXd t_2 = MatrixXd::Constant(d,m,1.0) - Y;
-    debugPrint(t_2, "1-Y");
+    //make some temp matrices
+    MatrixXd t_1;
+    MatrixXd t_2;
+    //compute wd = (y-t) * y (1-y)
+    t_1 = Y-T;
+    IF_DEBUG debugPrint(t_1, "Y-T");
+    t_2 = MatrixXd::Constant(d,m,1.0) - Y;
+    IF_DEBUG debugPrint(t_2, "1-Y");
 
-    MatrixXd t_3 = t_1*Y*t_2;
-    debugPrint(t_3, "(Y-T) * Y * (1.0 - Y)");
-    //Wd = (Y−T).∗(Y∗(MatrixXd::Constant(d, m, 1.0)−Y));
+    Wd = t_1.array()*Y.array()*t_2.array();
+    IF_DEBUG debugPrint(Wd, "Wd = (Y-T) * Y * (1.0 - Y)");
+
+    //compute Hw = Hb*(1-hb)*(Wd Wt)
+    t_1 = MatrixXd::Constant(d,h+1,1.0) - Hb;
+    IF_DEBUG debugPrint(t_1, "1-Hb");
+    t_2 =Wd*W.transpose();
+    IF_DEBUG debugPrint(t_2, "Wd W.transpose");
+
+    Hd = Hb.array() * (t_1).array()*(t_2).array();
+    IF_DEBUG debugPrint(Hd, "Hd = Hb*(1-Hb)*(Wd W.transpose");
+
+    //W -= eta *(Hb.trans Wd)
+    W -= (eta*(Hb.transpose() * Wd).array()).matrix();
+    IF_DEBUG debugPrint(W, "W -= eta*(Hb.trans Wd)");
+
+    //subtract of the bias now
+    Hdnb << Hd.rightCols(h);
+    IF_DEBUG debugPrint(Hdnb, "Hdnb is right h col of Hd");
+
+    //V-=eta *(Xb.trans Hdnb)
+    V -= (eta*(Xb.transpose() *Hdnb).array()).matrix();
+    IF_DEBUG debugPrint(V, "V-=eta *(Xb.trans Hdnb)");
 }
