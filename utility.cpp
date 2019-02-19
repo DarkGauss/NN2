@@ -1,6 +1,5 @@
 
 #include "utility.h"
-
 #include<iostream>
 #include<exception>
 #include<random>
@@ -100,10 +99,7 @@ void debugPrint(const Eigen::MatrixXd& input, std::string name)
 void csclassPrint(const Eigen::MatrixXd& input, std::string name)
 {
     using namespace Eigen;
-    IOFormat HeavyFmt(FullPrecision, 0, ", ", ";\n", "[", "]", "[", "]");\
-    printf("------------------------\n");
-    std::cout<<"DEBUG-PRINT: "<<name<<std::endl;
-    printf("Size(%d x %d)\n",int(input.rows()),int(input.cols()));
-    std::cout << input.format(HeavyFmt)<<std::endl;
-    printf("------------------------\n");
+    IOFormat ClassFMT(5, 0, " ","\n","", "", "", "");
+    std::cout<<name<<std::endl;
+    std::cout << input.format(ClassFMT)<<std::endl;
 }

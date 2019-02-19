@@ -17,7 +17,6 @@ NeuralNet::NeuralNet(DataSet& data)
     n = data.inputs;
     h = data.hiddenNodes;
     m = data.TrainingData.cols() - n;
-    printf("-------------- n = %d   m = %d\n",n,m);
 
     //set the array sizes for feed forward
     X.resize(d,n);
@@ -70,15 +69,19 @@ void NeuralNet::train(double eta, double num_iter)
     {
         feedForward(X);
         backProp(eta);
-        if( i % 1000 == 0){
+        if(DEBUG)
+        {
+            if( i % 1000 == 0)
+            {
             printf("---Gen %d ---\n",i);
             debugPrint(X,"Input");
             debugPrint(Y.unaryExpr([](double x){return x >= 0.5 ? 1.0 : 0.0;}),"Y");
             debugPrint(T,"T");
+            }
         }
-
     }
-
+    csclassPrint(T,"Target");
+    csclassPrint(Y.unaryExpr([](double x){return x >= 0.5 ? 1.0 : 0.0;}),"Predicted");
 }
 
 Eigen::VectorXd NeuralNet::predict(const Eigen::VectorXd &input)

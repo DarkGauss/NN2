@@ -72,19 +72,4 @@ private:
     Eigen::MatrixXd Hd; //(d x h+1) Hidden layer delta
     Eigen::MatrixXd Hdnb; //(d x h) Hidden layer delta with no bias
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif

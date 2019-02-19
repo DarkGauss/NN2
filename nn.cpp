@@ -6,11 +6,6 @@
 #include "utility.h"
 #include "neuralnet.h"
 
-#define DEBUG 1
-#define IF_DEBUG if(DEBUG)
-
-using namespace Eigen;
-
 double eta = 0.1;
 double num_iter = 10000;
 

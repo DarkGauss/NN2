@@ -1,5 +1,5 @@
 
-#include "Eigen/Dense"
+#include"Eigen/Dense"
 #include<string>
 
 #ifndef UTILITY_H
@@ -70,5 +70,5 @@ void debugPrint(const Eigen::MatrixXd& input, std::string name = "Matrix");
  * Inputs: a matrix and a title
  * Returns: nothing
  */
-void csclassPrint(const Eigen::MatrixXd& input, std::string name)
+void csclassPrint(const Eigen::MatrixXd& input, std::string name);
 #endif
