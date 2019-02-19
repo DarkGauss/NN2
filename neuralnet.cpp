@@ -76,7 +76,7 @@ NeuralNet::NeuralNet(DataSet& data)
     //add bias to x of -1
     Xb<<VectorXd::Constant(d,-1.0),Xn.leftCols(n);
     IF_DEBUG debugPrint(Xb, "Xb-input with bias");
-    
+
     test_Xb<<VectorXd::Constant(test_d,-1.0),test_Xn.leftCols(test_n);
     IF_DEBUG debugPrint(test_Xb, "Xb-input with bias");
 
@@ -133,7 +133,7 @@ void NeuralNet::predict()
 
     csclassPrint(test_T,"Target");
     csclassPrint(temp_Y,"Predicted");
-    /*  for(int i = test_m-1; i >= 0; i--)
+      for(int i = test_m-1; i >= 0; i--)
     {
         //max the confusion matrix
         ArrayXXd CNF_MAT = ArrayXXd::Zero(numOfClasses, numOfClasses);
@@ -143,7 +143,7 @@ void NeuralNet::predict()
         }
         printf("Confusion Matrix\n");
         std::cout<<CNF_MAT<<std::endl;
-    }*/
+    }
 
 }
 
