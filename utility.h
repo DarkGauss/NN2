@@ -58,4 +58,17 @@ Eigen::MatrixXd normMinMax(const Eigen::MatrixXd& input);
  */
 void debugPrint(const Eigen::MatrixXd& input, std::string name = "Matrix");
 
+/**
+ * csclassPrint
+ * -----------
+ * Prints out matrix out in style needed for cs class
+ * ex:
+ * Target
+ * 0.0000 0.0000 1.000
+ * 0.0000 0.0000 1.000
+ * -----
+ * Inputs: a matrix and a title
+ * Returns: nothing
+ */
+void csclassPrint(const Eigen::MatrixXd& input, std::string name)
 #endif

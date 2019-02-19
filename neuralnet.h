@@ -2,7 +2,7 @@
 #ifndef NEURALNET_H
 #define NEURALNET_H
 
-#define DEBUG 1
+#define DEBUG 0
 #define IF_DEBUG if(DEBUG)
 
 #include "Eigen/Dense"

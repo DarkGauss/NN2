@@ -96,3 +96,14 @@ void debugPrint(const Eigen::MatrixXd& input, std::string name)
     std::cout << input.format(HeavyFmt)<<std::endl;
     printf("------------------------\n");
 }
+
+void csclassPrint(const Eigen::MatrixXd& input, std::string name)
+{
+    using namespace Eigen;
+    IOFormat HeavyFmt(FullPrecision, 0, ", ", ";\n", "[", "]", "[", "]");\
+    printf("------------------------\n");
+    std::cout<<"DEBUG-PRINT: "<<name<<std::endl;
+    printf("Size(%d x %d)\n",int(input.rows()),int(input.cols()));
+    std::cout << input.format(HeavyFmt)<<std::endl;
+    printf("------------------------\n");
+}
