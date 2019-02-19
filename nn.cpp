@@ -13,7 +13,8 @@ int main()
 {
  DataSet data;
  NeuralNet est(data);
- est.train();
+ est.train(0.1,10000);
+ est.predict();
  return 0;
 }
 

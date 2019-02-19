@@ -6,7 +6,7 @@
 #define UTILITY_H
 
 //set to 1 to use random seed for weight matrix
-#define RANDOM_SEED 1
+#define RANDOM_SEED 0
 
 /**
  * randUnif

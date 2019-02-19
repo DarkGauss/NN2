@@ -38,7 +38,7 @@ public:
      * Output: Vector of outputs
      * 
      */
-    Eigen::VectorXd predict(const Eigen::VectorXd &input);
+    void predict();
 
 //public variables   
 public:
@@ -51,6 +51,12 @@ private:
 
 //private variables
 private:
+    int numOfClasses; //number of classes
+
+    int test_d; //number of test data rows
+    int test_n; //number of test inputs
+    int test_m; //number of test outputs
+
     int d; //number of training data rows
     int n;    //number of inputs
     int h;   //number of hidden nodes
@@ -71,5 +77,17 @@ private:
     Eigen::MatrixXd Wd; //(h+1 x m) Weight delta
     Eigen::MatrixXd Hd; //(d x h+1) Hidden layer delta
     Eigen::MatrixXd Hdnb; //(d x h) Hidden layer delta with no bias
+
+    //Matrices for test data
+    Eigen::MatrixXd test_X;  //(test_d x test_n)Input test data 
+    Eigen::MatrixXd test_Xn; //(test_d x test_n)Input test data normalized with min/max to be between [0,1]
+    Eigen::MatrixXd test_Xb; //(test_d x test_n+1)Input test data with biases of -1 added to first col
+    Eigen::MatrixXd test_H;  //(test_d x h) Hidden layer.
+    Eigen::MatrixXd test_Hb; //(test_d x h+1) hidden layer with bias -1 added to first col
+    Eigen::MatrixXd test_T;  //(test_d x test_m) Target nodes for output
+    Eigen::MatrixXd test_Y;  //(test_d x test_m) Output nodes for input
+
+    //confusion matrix
+    Eigen::Array<bool,Eigen::Dynamic,Eigen::Dynamic> conf; //test_d x test_m) confusion matrix.
 };
 #endif

@@ -99,7 +99,9 @@ void debugPrint(const Eigen::MatrixXd& input, std::string name)
 void csclassPrint(const Eigen::MatrixXd& input, std::string name)
 {
     using namespace Eigen;
-    IOFormat ClassFMT(5, 0, " ","\n","", "", "", "");
+    std::cout.flags(std::ios::fixed);
+    std::cout.precision(4);
+    IOFormat ClassFMT(StreamPrecision, 0, " ","\n","", "", "", "");
     std::cout<<name<<std::endl;
     std::cout << input.format(ClassFMT)<<std::endl;
 }
