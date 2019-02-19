@@ -17,6 +17,7 @@ NeuralNet::NeuralNet(DataSet& data)
     n = data.inputs;
     h = data.hiddenNodes;
     m = data.TrainingData.cols() - n;
+    printf("-------------- n = %d   m = %d\n",n,m);
 
     //set the array sizes for feed forward
     X.resize(d,n);
@@ -37,7 +38,7 @@ NeuralNet::NeuralNet(DataSet& data)
     //initilize the targets
     T<<data.TrainingData.rightCols(m);
     IF_DEBUG debugPrint(T, "T-targets");
-    
+
     //initialize the input
     X<<data.TrainingData.leftCols(data.inputs);
     IF_DEBUG debugPrint(X,"X-inputs");
@@ -52,7 +53,7 @@ NeuralNet::NeuralNet(DataSet& data)
 
     //initialize the weight matrices
     V=randUnif(n+1,h,0.0,1.0);
-    W=randUnif(n+1,h,0.0,1.0);
+    W=randUnif(h+1,m,0.0,1.0);
     IF_DEBUG debugPrint(V, "V-weights");
     IF_DEBUG debugPrint(W, "W-weights");
 }
@@ -63,9 +64,10 @@ NeuralNet::~NeuralNet()
 }
 
 //public functions
-void NeuralNet::train(double eta = 0.1, double num_iter = 10000)
+void NeuralNet::train(double eta, double num_iter)
 {
-
+    feedForward(X);
+    backProp();
 }
 
 Eigen::VectorXd NeuralNet::predict(const Eigen::VectorXd &input)
@@ -89,7 +91,8 @@ void NeuralNet::feedForward(const Eigen::MatrixXd &input)
 
     Hb<<VectorXd::Constant(d,-1.0),H.leftCols(h);
     IF_DEBUG debugPrint(Hb, "Hb-hidden nodes with bias");
-
+    IF_DEBUG debugPrint(W, "W - Weights");
+    IF_DEBUG debugPrint(Hb*W, "Hb*W - Weights");
     //calculuate t he outputs
     MatrixXd Y = (Hb*W).unaryExpr([this](double x){ return NeuralNet::transfer(x);});
     IF_DEBUG debugPrint(Y, "Y-outputs");   
@@ -97,5 +100,13 @@ void NeuralNet::feedForward(const Eigen::MatrixXd &input)
 
 void NeuralNet::backProp()
 {
+    MatrixXd t_1 = Y-T;
+    debugPrint(t_1, "Y-T");
 
+    MatrixXd t_2 = MatrixXd::Constant(d,m,1.0) - Y;
+    debugPrint(t_2, "1-Y");
+
+    MatrixXd t_3 = t_1*Y*t_2;
+    debugPrint(t_3, "(Y-T) * Y * (1.0 - Y)");
+    //Wd = (Y−T).∗(Y∗(MatrixXd::Constant(d, m, 1.0)−Y));
 }

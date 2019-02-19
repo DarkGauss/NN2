@@ -27,7 +27,7 @@ public:
      * of iterations
      * inputs: eta (learning rate) num_iter (num of training runs)
      */
-    void train(double eta, double num_iter);
+    void train(double eta = 0.1, double num_iter = 10000);
 
     /**
      * predict

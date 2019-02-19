@@ -18,6 +18,7 @@ int main()
 {
  DataSet data;
  NeuralNet est(data);
+ est.train();
  return 0;
 }
 
