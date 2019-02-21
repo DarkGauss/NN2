@@ -81,8 +81,8 @@ NeuralNet::NeuralNet(DataSet& data)
     IF_DEBUG debugPrint(test_Xb, "Xb-input with bias");
 
     //initialize the weight matrices
-    V=randUnif(n+1,h,0.0,1.0);
-    W=randUnif(h+1,m,0.0,1.0);
+    V=randUnif(n+1,h,-0.5,0.5);
+    W=randUnif(h+1,m,-0.5,0.5);
     IF_DEBUG debugPrint(V, "V-weights");
     IF_DEBUG debugPrint(W, "W-weights");
 }
@@ -159,10 +159,10 @@ void NeuralNet::predict(int nnoneof)
         {
             if(nnoneof == 0){
             //update the confusion matrix for 2x2
-                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) >= 0.5)  CNF_MAT(0,0) += 1.0;
-                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) >= 0.5)  CNF_MAT(1,0) += 1.0;
-                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) < 0.5)   CNF_MAT(1,1) += 1.0;
-                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) < 0.5)   CNF_MAT(0,1) += 1.0;
+                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) <= 0.5)  CNF_MAT(0,0) += 1.0;
+                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) <= 0.5)  CNF_MAT(1,0) += 1.0;
+                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) > 0.5)   CNF_MAT(1,1) += 1.0;
+                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) > 0.5)   CNF_MAT(0,1) += 1.0;
             }
             else
             {
