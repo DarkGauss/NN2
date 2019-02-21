@@ -38,7 +38,7 @@ public:
      * Output: Vector of outputs
      * 
      */
-    void predict();
+    void predict(int nnoneof = 0);
 
 //public variables   
 public:

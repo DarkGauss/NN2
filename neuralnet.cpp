@@ -112,7 +112,7 @@ void NeuralNet::train(double eta, double num_iter)
     }
 }
 
-void NeuralNet::predict()
+void NeuralNet::predict(int nnoneof)
 {   
     //apply the weight matricies
 
@@ -129,18 +129,49 @@ void NeuralNet::predict()
     IF_DEBUG debugPrint(test_Y, "test_Y-outputs");   
 
     //now calc confusion
-    MatrixXd temp_Y = test_Y.unaryExpr([](double x){return x >= 0.5 ? 1.0 : 0.0;});
+    //if nonof then make temp_Y argmax of each row
+    MatrixXd temp_Y;
+
+    if(nnoneof == 0)
+    {
+        temp_Y = test_Y.unaryExpr([](double x){return x >= 0.5 ? 1.0 : 0.0;});
+    }
+    else
+    {
+        //VectorXd::Index index;
+        for(int r = 0; r < test_d; r++)
+        {
+            temp_Y.resize(test_d,1);
+            MatrixXf::Index   maxIndex;
+            test_Y.row(r).maxCoeff( &maxIndex);
+            temp_Y(r,0) = double(maxIndex);
+        }
+    }
 
     csclassPrint(test_T,"Target");
     csclassPrint(temp_Y,"Predicted");
-      for(int i = test_m-1; i >= 0; i--)
+    for(int i = 0; i < test_T.cols(); i++)
     {
         //max the confusion matrix
         ArrayXXd CNF_MAT = ArrayXXd::Zero(numOfClasses, numOfClasses);
+
         for(int r = 0; r < test_d; r++)
         {
-            CNF_MAT(int(test_T(r,i)),int(temp_Y(r,i))) += 1.0;
+            if(nnoneof == 0){
+            //update the confusion matrix for 2x2
+                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) >= 0.5)  CNF_MAT(0,0) += 1.0;
+                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) >= 0.5)  CNF_MAT(1,0) += 1.0;
+                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) < 0.5)   CNF_MAT(1,1) += 1.0;
+                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) < 0.5)   CNF_MAT(0,1) += 1.0;
+            }
+            else
+            {
+                CNF_MAT(int(test_T(r,i)),int(temp_Y(r,i))) += 1.0;
+            }
+            
         }
+        
+
         printf("Confusion Matrix\n");
         std::cout<<CNF_MAT<<std::endl;
     }

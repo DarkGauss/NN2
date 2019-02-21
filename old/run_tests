@@ -1,0 +1,5 @@
+#!/bin/bash
+program_name=$(grep -P -o '(?<=BIN=)[A-Za-z0-9]*' makefile)
+path=$(pwd)
+AFTER=`echo $program_name | sed 's/\\r//g'`
+$AFTER

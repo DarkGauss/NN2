@@ -1,25 +1,20 @@
-#define EIGEN_USE_MKL_AL
+
 #include <iostream>
+#include <cmath>
 #include "Eigen/Dense"
 #include "dataset.h"
+#include "utility.h"
+#include "neuralnet.h"
 
-using namespace Eigen;
+double eta = 0.1;
+double num_iter = 10000;
 
 int main()
 {
-
-  MatrixXd m(2,2);
-  m.setRandom();
-  MatrixXd m_2(4,4);
-  m_2<<m,m,m,m;
-  std::cout << m << std::endl;
-  std::cout << m_2 << std::endl;
-
- /*DataSet newor;
- newor.print();
- MatrixXd In = newor.TrainingData;
- std::cout<<In<<std::endl;
- In.stableNormalize();
- std::cout<<In<<std::endl;
- return 0;*/
+ DataSet data;
+ NeuralNet est(data);
+ est.train(0.1,10000);
+ est.predict(1);
+ return 0;
 }
+

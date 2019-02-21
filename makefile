@@ -18,6 +18,7 @@ EXTRAS=\
 
 
 SRCS=\
+$(BIN)oneof.cpp\
 $(BIN).cpp\
 dataset.cpp\
 utility.cpp\
@@ -34,8 +35,20 @@ dataset.o\
 utility.o\
 neuralnet.o
 
+OBJS2=\
+$(BIN)oneof.o\
+dataset.o\
+utility.o\
+neuralnet.o
+
 $(BIN): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(LIBS) -o $(BIN)
+
+$(BIN)oneof: $(OBJS) $(BIN)oneof.o
+	$(CXX)  $(CxxFLAGS) $(OBJS2) $(LIBS) -o $(BIN)oneof
+
+$(BIN)oneof.o: $(BIN)oneof.cpp
+	g++ -Wall -g -c $(BIN)oneof.cpp -o $(BIN)oneof.o
 
 clean:
 	/bin/rm -f *.o $(TARNAME).tar *~ core gmon.out a.out
