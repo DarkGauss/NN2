@@ -35,5 +35,10 @@
 *.vs
 *.vscode
 
-#old
-./old
+#misc
+old/
+TD/
+.vs/
+.vscode/
+nn
+nnoneof
