@@ -9,7 +9,7 @@
 
 using namespace Eigen;
 
-NeuralNet::NeuralNet(DataSet& data)
+NeuralNet::NeuralNet(DataSet& data, double V_lower, double V_upper, double W_lower, double W_upper)
 {
     //init number of classes
     numOfClasses = data.numOfClasses;
@@ -81,8 +81,8 @@ NeuralNet::NeuralNet(DataSet& data)
     IF_DEBUG debugPrint(test_Xb, "Xb-input with bias");
 
     //initialize the weight matrices
-    V=randUnif(n+1,h,-0.5,0.5);
-    W=randUnif(h+1,m,-0.5,0.5);
+    V=randUnif(n+1,h,V_lower,V_upper);
+    W=randUnif(h+1,m,V_lower,V_upper);
     IF_DEBUG debugPrint(V, "V-weights");
     IF_DEBUG debugPrint(W, "W-weights");
 }
@@ -147,9 +147,11 @@ void NeuralNet::predict(int nnoneof)
             temp_Y(r,0) = double(maxIndex);
         }
     }
-
+    //std::cout<<RMSE(test_T,temp_Y);
+    
     csclassPrint(test_T,"Target");
     csclassPrint(temp_Y,"Predicted");
+
     for(int i = 0; i < test_T.cols(); i++)
     {
         //max the confusion matrix
@@ -175,7 +177,7 @@ void NeuralNet::predict(int nnoneof)
         printf("Confusion Matrix\n");
         std::cout<<CNF_MAT<<std::endl;
     }
-
+    
 }
 
 //private functions
@@ -235,4 +237,13 @@ void NeuralNet::backProp(double eta)
     //V-=eta *(Xb.trans Hdnb)
     V -= (eta*(Xb.transpose() *Hdnb).array()).matrix();
     IF_DEBUG debugPrint(V, "V-=eta *(Xb.trans Hdnb)");
+}
+
+
+double NeuralNet::RMSE(const Eigen::MatrixXd &T, const Eigen::MatrixXd &Y)
+{
+    MatrixXd error = T-Y;
+    error = error.cwiseProduct(error).eval();
+    MatrixXd new_error = error.cwiseSqrt().eval();
+    return new_error.sum();
 }

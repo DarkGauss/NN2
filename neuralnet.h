@@ -16,7 +16,7 @@
 class NeuralNet
 {
 public:
-    NeuralNet(DataSet& data);
+    NeuralNet(DataSet& data,double V_lower, double V_upper, double W_lower, double W_upper);
     ~NeuralNet();
     
     /**
@@ -48,6 +48,7 @@ private:
     double transfer(double x);
     void feedForward(const Eigen::MatrixXd &input);
     void backProp(double eta);
+    double RMSE(const Eigen::MatrixXd &T, const Eigen::MatrixXd &Y);
 
 //private variables
 private:
