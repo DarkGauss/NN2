@@ -36,6 +36,7 @@
 *.vscode
 
 #misc
+very_old/
 old/
 TD/
 .vs/
