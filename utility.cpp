@@ -65,7 +65,6 @@ Eigen::MatrixXd normMinMax(const Eigen::MatrixXd& input)
     using namespace Eigen;
     VectorXd minVal = input.colwise().minCoeff();
     VectorXd maxVal = input.colwise().maxCoeff();
-
     int r = int(input.rows());
     int c = int(input.cols());
 
@@ -76,8 +75,7 @@ Eigen::MatrixXd normMinMax(const Eigen::MatrixXd& input)
         for (int col = 0; col < c; col++)
         {
             double x = input(row,col);
-            x = x-minVal[col];
-            x = x/(maxVal[col]-minVal[col]);
+            x = (x-minVal[col])/(maxVal[col]-minVal[col]);
             output(row, col) = x;
         }
     }
@@ -95,6 +93,27 @@ void debugPrint(const Eigen::MatrixXd& input, std::string name)
     std::cout << input.format(HeavyFmt)<<std::endl;
     printf("------------------------\n");
 }
+
+void csvPrint(const Eigen::MatrixXd& input, std::string name)
+{
+    using namespace Eigen;
+    IOFormat CleanFmt(4, 0, ",", "", "", "");
+    std::cout << input.row(0).format(CleanFmt)<<",";
+
+}
+void csvWeightPrint(const Eigen::MatrixXd& input, int n, int h)
+{
+    using namespace Eigen;
+    for(int r = 0; r < n+1; r++)
+        {
+            for(int c = 0; c < h; c++)
+            {
+                //V(weight) for synapse from [neuron] to [hidden node] n+1 node is bias
+                printf("%.2f,",float(input(r,c)));
+            }
+        }
+}
+
 
 void csclassPrint(const Eigen::MatrixXd& input, std::string name)
 {

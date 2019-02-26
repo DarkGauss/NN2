@@ -3,6 +3,8 @@
 #define NEURALNET_H
 
 #define DEBUG 0
+#define CSV_PRINT 1
+#define IF_CSV if(CSV_PRINT)
 #define IF_DEBUG if(DEBUG)
 
 #include "Eigen/Dense"
@@ -16,7 +18,7 @@
 class NeuralNet
 {
 public:
-    NeuralNet(DataSet& data,double V_lower, double V_upper, double W_lower, double W_upper);
+    NeuralNet(DataSet& data,double V_lower, double V_upper, double W_lower, double W_upper); //allows setting range explicitly
     ~NeuralNet();
     
     /**
@@ -27,18 +29,18 @@ public:
      * of iterations
      * inputs: eta (learning rate) num_iter (num of training runs)
      */
-    void train(double eta = 0.1, double num_iter = 10000);
+    void train(double eta = 0.1, double num_iter = 10000, bool python_check = false);
 
     /**
      * predict
      * -------
      * takes a row vector of inputs and runs the network on them with the 
      * given waits to get the predicted output
-     * Input: Vector of inputs
+     * Input: Weather iris data, and wheater being run by python program
      * Output: Vector of outputs
      * 
      */
-    void predict(int nnoneof = 0);
+    void predict(int nnoneof = 0, bool python_check = false);
 
 //public variables   
 public:

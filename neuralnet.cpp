@@ -87,14 +87,40 @@ NeuralNet::NeuralNet(DataSet& data, double V_lower, double V_upper, double W_low
     IF_DEBUG debugPrint(W, "W-weights");
 }
 
+//default for use with auto setting of weight range
+
 NeuralNet::~NeuralNet()
 {
 
 }
 
 //public functions
-void NeuralNet::train(double eta, double num_iter)
-{
+void NeuralNet::train(double eta, double num_iter, bool python_check)
+{   //added code for printing csv
+    //version
+    if(CSV_PRINT)
+    {
+        //print of X colllums for csv based on # of inputs
+        for(int i = 0; i < n; i++)
+        {
+            printf("X[%d],",i);
+        }
+           //print of X colllums for csv based on # of inputs
+        for(int i = 0; i < n; i++)
+        {
+            printf("Xn[%d],",i);
+        }
+        for(int r = 0; r < n+1; r++)
+        {
+            for(int c = 0; c < h; c++)
+            {
+                //V(weight) for synapse from [neuron] to [hidden node] n+1 node is bias
+                printf("V[%d][%d],",r,c);
+            }
+        }
+        printf("\n");
+
+    }
     for(int i = 0; i < num_iter; i++)
     {
         feedForward(X);
@@ -110,9 +136,13 @@ void NeuralNet::train(double eta, double num_iter)
             }
         }
     }
+    if(python_check)
+    {
+        std::cout<<RMSE(T, Y.unaryExpr([](double x){return x >= 0.5 ? 1.0 : 0.0;}))<<',';
+    }
 }
 
-void NeuralNet::predict(int nnoneof)
+void NeuralNet::predict(int nnoneof, bool python_check)
 {   
     //apply the weight matricies
 
@@ -148,36 +178,43 @@ void NeuralNet::predict(int nnoneof)
         }
     }
     //std::cout<<RMSE(test_T,temp_Y);
-    
-    csclassPrint(test_T,"Target");
-    csclassPrint(temp_Y,"Predicted");
-
-    for(int i = 0; i < test_T.cols(); i++)
+    if(!python_check && !CSV_PRINT)
     {
-        //max the confusion matrix
-        ArrayXXd CNF_MAT = ArrayXXd::Zero(numOfClasses, numOfClasses);
+        csclassPrint(test_T,"Target");
+        csclassPrint(temp_Y,"Predicted");
 
-        for(int r = 0; r < test_d; r++)
+        for(int i = 0; i < test_T.cols(); i++)
         {
-            if(nnoneof == 0){
-            //update the confusion matrix for 2x2
-                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) <= 0.5)  CNF_MAT(0,0) += 1.0;
-                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) <= 0.5)  CNF_MAT(1,0) += 1.0;
-                if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) > 0.5)   CNF_MAT(1,1) += 1.0;
-                if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) > 0.5)   CNF_MAT(0,1) += 1.0;
-            }
-            else
+            //max the confusion matrix
+            ArrayXXd CNF_MAT = ArrayXXd::Zero(numOfClasses, numOfClasses);
+
+            for(int r = 0; r < test_d; r++)
             {
-                CNF_MAT(int(test_T(r,i)),int(temp_Y(r,i))) += 1.0;
+                if(nnoneof == 0){
+                //update the confusion matrix for 2x2
+                    if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) <= 0.5)  CNF_MAT(0,0) += 1.0;
+                    if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) <= 0.5)  CNF_MAT(1,0) += 1.0;
+                    if(test_T(r,i) == temp_Y(r,i) && test_T(r,i) > 0.5)   CNF_MAT(1,1) += 1.0;
+                    if(test_T(r,i) != temp_Y(r,i) && test_T(r,i) > 0.5)   CNF_MAT(0,1) += 1.0;
+                }
+                else
+                {
+                    CNF_MAT(int(test_T(r,i)),int(temp_Y(r,i))) += 1.0;
+                }
+                
             }
             
+
+            printf("Confusion Matrix\n");
+            std::cout<<CNF_MAT<<std::endl;
         }
         
-
-        printf("Confusion Matrix\n");
-        std::cout<<CNF_MAT<<std::endl;
     }
-    
+    else if(python_check)
+    {
+        std::cout<<RMSE(test_T, temp_Y);
+    }
+
 }
 
 //private functions
@@ -189,6 +226,13 @@ double NeuralNet::transfer(double x)
 
 void NeuralNet::feedForward(const Eigen::MatrixXd &input)
 {
+
+    //print stuff for csv
+    if(CSV_PRINT){
+        csvPrint(X,"X");
+        csvPrint(Xn,"Xn");
+        csvWeightPrint(V,n,h);
+    }
     //apply the weights to the connects Xb->H
     H = (Xb*V).unaryExpr([this](double x){ return NeuralNet::transfer(x);});
     IF_DEBUG debugPrint(H,"H-Hidden nodes");
@@ -199,6 +243,8 @@ void NeuralNet::feedForward(const Eigen::MatrixXd &input)
     IF_DEBUG debugPrint(Hb*W, "Hb*W - Weights");
     //calculuate t he outputs
     Y = (Hb*W).unaryExpr([this](double x){ return NeuralNet::transfer(x);});
+
+
     IF_DEBUG debugPrint(Y, "Y-outputs");   
 }
 

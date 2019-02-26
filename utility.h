@@ -6,7 +6,7 @@
 #define UTILITY_H
 
 //set to 1 to use random seed for weight matrix
-#define RANDOM_SEED 1
+#define RANDOM_SEED 0
 
 /**
  * randUnif
@@ -57,6 +57,24 @@ Eigen::MatrixXd normMinMax(const Eigen::MatrixXd& input);
  * Returns: nothing
  */
 void debugPrint(const Eigen::MatrixXd& input, std::string name = "Matrix");
+/**
+ * csvPrint
+ * -----------
+ * Prints out the first row of the matrix passed in csv form
+ * -----
+ * Inputs: a matrix 
+ * Returns: nothing
+ */
+void csvPrint(const Eigen::MatrixXd& input, std::string name = "Matrix");
+/**
+ * csvWeightPrint
+ * -----------
+ * Prints out the first row of the matrix passed in csv form
+ * -----
+ * Inputs: a matrix and number of inputs and number of output nodes
+ * Returns: nothing
+ */
+void csvWeightPrint(const Eigen::MatrixXd& input, int n, int h);
 
 /**
  * csclassPrint
