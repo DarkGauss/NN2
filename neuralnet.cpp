@@ -118,12 +118,67 @@ void NeuralNet::train(double eta, double num_iter, bool python_check)
                 printf("V[%d][%d],",r,c);
             }
         }
+        for(int i = 0; i < h; i++)
+        {
+            printf("H[%d],",i);
+        }
+        for(int i = 0; i < h; i++)
+        {
+            printf("t(H[%d]),",i);
+        }
+        for(int r = 0; r < h+1; r++)
+        {
+            for(int c = 0; c < m; c++)
+            {
+                //V(weight) for synapse from [neuron] to [hidden node] n+1 node is bias
+                printf("W[%d][%d],",r,c);
+            }
+        }
+        for(int i = 0; i < m; i++)
+        {
+            printf("Y[%d]),",i);
+        }
+        for(int i = 0; i < m; i++)
+        {
+            printf("t(Y[%d])),",i);
+        }
+        for(int i = 0; i < m; i++)
+        {
+            printf("max(t(Y[%d]))),",i);
+        }
+        for(int i = 0; i < m; i++)
+        {
+            if(i != m-1)
+            {
+                printf("T[%d],",i);
+            }
+            else
+            {
+                printf("T[%d]",i);
+            }
+            
+        }
         printf("\n");
 
     }
     for(int i = 0; i < num_iter; i++)
     {
         feedForward(X);
+        //print out stuff for csv every CSV_PRINTEVERY iterations
+        if(CSV_PRINT && (i%CSV_PRINTEVERY)==0)
+        {
+            csvPrint(X,"X");
+            csvPrint(Xn,"Xn");
+            csvWeightPrint(V,n,h);
+            csvPrint(Xb*V,"H pree");
+            csvPrint(H,"H post transfer");
+            csvWeightPrint(W,h,m);
+            csvPrint(Hb*W);
+            csvPrint(Y);
+            csvPrint(Y.unaryExpr([](double x){return x >= 0.5 ? 1.0 : 0.0;}));
+            csvPrint(T,"targets",true);
+            printf("\n");
+        }
         backProp(eta);
         if(DEBUG)
         {
@@ -227,20 +282,21 @@ double NeuralNet::transfer(double x)
 void NeuralNet::feedForward(const Eigen::MatrixXd &input)
 {
 
-    //print stuff for csv
-    if(CSV_PRINT){
-        csvPrint(X,"X");
-        csvPrint(Xn,"Xn");
-        csvWeightPrint(V,n,h);
-    }
+
+    //print the hidden layer before the sigmoid
+
+
     //apply the weights to the connects Xb->H
     H = (Xb*V).unaryExpr([this](double x){ return NeuralNet::transfer(x);});
     IF_DEBUG debugPrint(H,"H-Hidden nodes");
+
 
     Hb<<VectorXd::Constant(d,-1.0),H.leftCols(h);
     IF_DEBUG debugPrint(Hb, "Hb-hidden nodes with bias");
     IF_DEBUG debugPrint(W, "W - Weights");
     IF_DEBUG debugPrint(Hb*W, "Hb*W - Weights");
+
+    
     //calculuate t he outputs
     Y = (Hb*W).unaryExpr([this](double x){ return NeuralNet::transfer(x);});
 

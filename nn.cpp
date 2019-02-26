@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     {
         DataSet data;
         NeuralNet est(data,0.0,0.5,0.0,0.5);
-        est.train(0.1,1);
+        est.train(0.1,10000);
         est.predict(0);
     }
     else if(argc != 8)

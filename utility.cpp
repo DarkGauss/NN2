@@ -94,11 +94,20 @@ void debugPrint(const Eigen::MatrixXd& input, std::string name)
     printf("------------------------\n");
 }
 
-void csvPrint(const Eigen::MatrixXd& input, std::string name)
+void csvPrint(const Eigen::MatrixXd& input, std::string name,bool noComma)
 {
     using namespace Eigen;
     IOFormat CleanFmt(4, 0, ",", "", "", "");
-    std::cout << input.row(0).format(CleanFmt)<<",";
+    if(!noComma)
+    {
+        std::cout << input.row(0).format(CleanFmt)<<",";
+    }
+    else
+    {
+        std::cout << input.row(0).format(CleanFmt);
+    }
+    
+
 
 }
 void csvWeightPrint(const Eigen::MatrixXd& input, int n, int h)

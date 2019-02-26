@@ -65,7 +65,7 @@ void debugPrint(const Eigen::MatrixXd& input, std::string name = "Matrix");
  * Inputs: a matrix 
  * Returns: nothing
  */
-void csvPrint(const Eigen::MatrixXd& input, std::string name = "Matrix");
+void csvPrint(const Eigen::MatrixXd& input, std::string name = "Matrix", bool noComma = false);
 /**
  * csvWeightPrint
  * -----------

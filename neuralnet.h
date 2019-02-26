@@ -4,6 +4,7 @@
 
 #define DEBUG 0
 #define CSV_PRINT 1
+#define CSV_PRINTEVERY 100  //how many iterations to print data
 #define IF_CSV if(CSV_PRINT)
 #define IF_DEBUG if(DEBUG)
 
